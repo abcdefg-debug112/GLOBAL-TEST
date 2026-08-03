@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글로벌 보안 수요 분석 및 진출 전략 보고서 자동 생성 시스템</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Pretendard', sans-serif; }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; color: black; }
+            .shadow-lg, .shadow { box-shadow: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header / Navigation -->
+    <header class="bg-slate-900 text-white shadow-md no-print">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-600 p-2.5 rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-shield-halved text-xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">K-Security 글로벌 인텔리전스 시스템</h1>
+                    <p class="text-xs text-slate-400">중남미 · 동남아 · 중동/아프리카 거점 수요 분석 및 국내 보안기업 진출 보고서 생성</p>
+                </div>
+            </div>
+            <!-- Navigation Tabs -->
+            <nav class="flex space-x-1 bg-slate-800 p-1 rounded-xl text-sm font-medium">
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="px-4 py-2 rounded-lg transition-all bg-blue-600 text-white shadow">
+                    <i class="fa-solid fa-chart-pie mr-1.5"></i>대시보드
+                </button>
+                <button onclick="switchTab('entry')" id="tab-entry" class="px-4 py-2 rounded-lg transition-all text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-pen-to-square mr-1.5"></i>면담 입력 & AI 분석
+                </button>
+                <button onclick="switchTab('matching')" id="tab-matching" class="px-4 py-2 rounded-lg transition-all text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-handshake mr-1.5"></i>수요 & 기업 매칭 DB
+                </button>
+                <button onclick="switchTab('report')" id="tab-report" class="px-4 py-2 rounded-lg transition-all text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-file-invoice mr-1.5"></i>보고서 원클릭 생성
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-6 py-8">
+
+        <!-- TAB 1: 대시보드 (Dashboard) -->
+        <section id="sec-dashboard" class="space-y-6">
+            <!-- Summary Metric Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">누적 면담 건수</p>
+                        <p class="text-3xl font-extrabold text-slate-900 mt-1" id="stat-total-meetings">28건</p>
+                        <p class="text-xs text-emerald-600 mt-1"><i class="fa-solid fa-arrow-trend-up mr-1"></i>3개 전략 거점 밀착 대응</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">도출된 핵심 수요</p>
+                        <p class="text-3xl font-extrabold text-slate-900 mt-1" id="stat-total-demands">22개</p>
+                        <p class="text-xs text-slate-500 mt-1">지역별 맞춤 솔루션 매칭</p>
+                    </div>
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">매칭 가능 국내 기업</p>
+                        <p class="text-3xl font-extrabold text-slate-900 mt-1">54개사</p>
+                        <p class="text-xs text-blue-600 mt-1">보안 기술 DB 연동 완료</p>
+                    </div>
+                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-building-shield"></i>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">진출 추진 파이프라인</p>
+                        <p class="text-3xl font-extrabold text-slate-900 mt-1">9개 사업</p>
+                        <p class="text-xs text-emerald-600 mt-1">G2G/G2B 협력 로드쇼 추진</p>
+                    </div>
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-rocket"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hub Cards & Demand Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Hub Status Card 1: 중남미 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-amber-400 transition">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold">거점 1</span>
+                            <span class="text-xs text-slate-400">중남미 / 산호세·상파울루</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800">중남미 권역</h3>
+                        <p class="text-sm text-slate-600 mt-2">코스타리카 MICITT, 브라질 금융 CSIRT 면담 완료. 국가 사이버 침해대응 체계 고도화 및 랜섬웨어 방어, 금융 보안 강화 수요 집중.</p>
+                        <div class="mt-4 flex flex-wrap gap-1.5">
+                            <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">#국가CERT구축</span>
+                            <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">#랜섬웨어방어</span>
+                            <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">#금융보안</span>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between text-xs text-slate-500">
+                        <span>면담 8건 완료</span>
+                        <span class="font-semibold text-amber-600">진출 기회 3건</span>
+                    </div>
+                </div>
+
+                <!-- Hub Status Card 2: 동남아 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-emerald-400 transition">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">거점 2</span>
+                            <span class="text-xs text-slate-400">동남아 / 자카르타·하노이</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800">동남아 & 아세안</h3>
+                        <p class="text-sm text-slate-600 mt-2">인도네시아 BSSN 및 베트남 정보통신부(MIC) 면담. 국가 SOC 관제센터 구축, EDR/XDR 도입 및 사이버 보안 전문인력 양성 연수 프로그램 원함.</p>
+                        <div class="mt-4 flex flex-wrap gap-1.5">
+                            <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">#국가SOC관제</span>
+                            <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">#EDR/XDR</span>
+                            <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">#인력양성 ODA</span>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between text-xs text-slate-500">
+                        <span>면담 11건 완료</span>
+                        <span class="font-semibold text-emerald-600">진출 기회 4건</span>
+                    </div>
+                </div>
+
+                <!-- Hub Status Card 3: 중동/아프리카 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-purple-400 transition">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-2.5 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-bold">거점 3</span>
+                            <span class="text-xs text-slate-400">중동·아프리카 / 리야드·두바이·나이로비</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800">중동 & 아프리카</h3>
+                        <p class="text-sm text-slate-600 mt-2">사우디 NCA 및 UAE 사이버보안청, 케냐 NC4 면담. 스마트시티 대규모 프로젝트 연계 물리·사이버 융합보안, Zero Trust, OT/기반시설 보안 수요 폭증.</p>
+                        <div class="mt-4 flex flex-wrap gap-1.5">
+                            <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">#스마트시티보안</span>
+                            <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">#OT/ICS제어</span>
+                            <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">#ZeroTrust</span>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between text-xs text-slate-500">
+                        <span>면담 9건 완료</span>
+                        <span class="font-semibold text-purple-600">진출 기회 2건</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Demand Category Chart -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-800 text-base mb-4 flex items-center">
+                        <i class="fa-solid fa-chart-column text-blue-600 mr-2"></i>3개 전략 거점별 주요 보안 기술 수요 비교
+                    </h3>
+                    <div class="h-64 relative">
+                        <canvas id="demandChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Key Meetings Stream -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                    <h3 class="font-bold text-slate-800 text-base mb-4 flex items-center justify-between">
+                        <span><i class="fa-solid fa-clock-rotate-left text-blue-600 mr-2"></i>최근 거점 기관 면담 내역</span>
+                        <button onclick="switchTab('entry')" class="text-xs text-blue-600 hover:underline">+ 새 면담 등록</button>
+                    </h3>
+                    <div class="space-y-3 overflow-y-auto max-h-64 pr-1" id="recent-meetings-list">
+                        <!-- Dynamic rendered list items -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: 면담 입력 & AI 분석 (Entry & AI Extraction) -->
+        <section id="sec-entry" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <h2 class="font-bold text-xl text-slate-900">거점별 기관 면담 결과 입력 & AI 자동 파싱</h2>
+                    <p class="text-sm text-slate-500 mt-1">현지 기관/기업과의 면담 내용 요약을 입력하면 AI가 핵심 보안 수요, 추천 한국 기업, 후속 사업화 액션을 자동으로 추출합니다.</p>
+                </div>
+
+                <form id="meetingForm" onsubmit="handleFormSubmit(event)" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Left Column: Form Inputs -->
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">해외 거점 구분 <span class="text-red-500">*</span></label>
+                                <select id="inputHub" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                    <option value="중남미 거점">1. 중남미 거점 (산호세/상파울루)</option>
+                                    <option value="동남아 거점">2. 동남아 거점 (자카르타/하노이)</option>
+                                    <option value="중동/아프리카 거점">3. 중동/아프리카 거점 (리야드/두바이/나이로비)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">면담 일자 <span class="text-red-500">*</span></label>
+                                <input type="date" id="inputDate" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">기관/기업 유형 <span class="text-red-500">*</span></label>
+                                <select id="inputOrgType" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                    <option value="정부부처/국가CERT">정부부처 / 국가CERT</option>
+                                    <option value="공공기관/금융기관">공공기관 / 금융기관</option>
+                                    <option value="현지통신사/디지털기업">현지 통신사 / IT enterprise</option>
+                                    <option value="국제기구/협회">국제기구 / 지역 협회</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">면담 기관명 <span class="text-red-500">*</span></label>
+                                <input type="text" id="inputOrgName" placeholder="예: 코스타리카 MICITT, 사우디 NCA" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">상대측 참석자 & 직책</label>
+                            <input type="text" id="inputContact" placeholder="예: Carlos Rodriguez (사이버안보국장)" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">면담 주요 요약 및 논의 안건 <span class="text-red-500">*</span></label>
+                            <textarea id="inputNotes" rows="6" required placeholder="현지 기관의 주요 보안 현안, 필요 기술/솔루션, 사업 예산 규모, 한국 기업과의 협력 희망 형태 등을 입력해주세요." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="button" onclick="simulateAIAnalysis()" class="w-full bg-slate-800 text-white font-medium py-2.5 rounded-lg hover:bg-slate-900 transition flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                                <span>AI 보안 수요 & 매칭 포인트 자동 추출</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: AI Extraction Preview -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-bold text-slate-800 text-sm flex items-center">
+                                    <i class="fa-solid fa-robot text-blue-600 mr-2"></i>AI 인텔리전스 분석 결과
+                                </h3>
+                                <span id="aiStatusBadge" class="px-2 py-0.5 bg-slate-200 text-slate-600 text-xs rounded-full">분석 대기 중</span>
+                            </div>
+
+                            <div class="space-y-4 text-xs">
+                                <div>
+                                    <p class="font-semibold text-slate-700">도출된 핵심 보안 수요 (Demand Tags)</p>
+                                    <div id="aiDemandTags" class="flex flex-wrap gap-1.5 mt-1.5 min-h-[32px] p-2 bg-white rounded border border-slate-200">
+                                        <span class="text-slate-400 italic">면담 작성 후 AI 분석 버튼을 눌러주세요.</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="font-semibold text-slate-700">추천 기술/솔루션 분류</p>
+                                    <div id="aiSolutionCategory" class="p-2.5 bg-white rounded border border-slate-200 text-slate-600 min-h-[36px]">
+                                        -
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="font-semibold text-slate-700">매칭 가능 추천 한국 기업 (DB 연동)</p>
+                                    <div id="aiMatchedCompanies" class="p-2.5 bg-white rounded border border-slate-200 text-slate-600 min-h-[36px]">
+                                        -
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="font-semibold text-slate-700">후속 권장 액션 플랜 (Action Items)</p>
+                                    <div id="aiActionItems" class="p-2.5 bg-white rounded border border-slate-200 text-slate-600 min-h-[48px]">
+                                        -
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-200">
+                            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition shadow">
+                                <i class="fa-solid fa-floppy-disk mr-2"></i>거점 DB에 등록 및 업데이트
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- TAB 3: 수요 & 기업 매칭 DB (Matching DB) -->
+        <section id="sec-matching" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <div>
+                        <h2 class="font-bold text-xl text-slate-900">3개 거점 현지 수요 & 국내 보안기업 매칭 DB</h2>
+                        <p class="text-sm text-slate-500 mt-1">중남미, 동남아, 중동/아프리카 거점별로 축적된 현지 기관 요구사항과 한국 기업 연계 데이터 현황입니다.</p>
+                    </div>
+                    <!-- Filters -->
+                    <div class="flex items-center space-x-2 w-full md:w-auto">
+                        <select id="filterHub" onchange="filterMatchingTable()" class="px-3 py-2 border border-slate-300 rounded-lg text-xs font-semibold focus:outline-none">
+                            <option value="ALL">전체 거점 보기</option>
+                            <option value="중남미 거점">1. 중남미 거점</option>
+                            <option value="동남아 거점">2. 동남아 거점</option>
+                            <option value="중동/아프리카 거점">3. 중동/아프리카 거점</option>
+                        </select>
+                        <select id="filterCategory" onchange="filterMatchingTable()" class="px-3 py-2 border border-slate-300 rounded-lg text-xs font-semibold focus:outline-none">
+                            <option value="ALL">전체 기술 분야</option>
+                            <option value="국가SOC / CERT관제">국가SOC / CERT관제</option>
+                            <option value="OT / 스마트시티 융합보안">OT / 스마트시티 융합보안</option>
+                            <option value="EDR / 랜섬웨어 방어">EDR / 랜섬웨어 방어</option>
+                            <option value="Zero Trust / 암호화">Zero Trust / 암호화</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200 bg-slate-50 text-slate-600 text-xs font-bold uppercase tracking-wider">
+                                <th class="py-3 px-4">거점 / 일자</th>
+                                <th class="py-3 px-4">면담 기관 / 담당자</th>
+                                <th class="py-3 px-4">현지 주요 요구사항 (Demand Needs)</th>
+                                <th class="py-3 px-4">솔루션 분야</th>
+                                <th class="py-3 px-4">매칭 추천 국내 기업</th>
+                                <th class="py-3 px-4">진출 추진 단계</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matchingTableBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Dynamically populated rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: 보고서 원클릭 생성 (Report Builder) -->
+        <section id="sec-report" class="hidden space-y-6">
+            <!-- Report Controls (No Print) -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm no-print space-y-4">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                        <h2 class="font-bold text-xl text-slate-900">거점별 글로벌 진출 전략 보고서 자동 생성</h2>
+                        <p class="text-sm text-slate-500 mt-1">중남미, 동남아, 중동/아프리카 거점 데이터를 바탕으로 완성도 높은 정책/기업지원 보고서를 즉시 출력합니다.</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="generateReport()" class="bg-blue-600 text-white font-bold px-5 py-2.5 rounded-lg hover:bg-blue-700 transition flex items-center space-x-2">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                            <span>보고서 데이터 갱신</span>
+                        </button>
+                        <button onclick="window.print()" class="bg-slate-800 text-white font-bold px-5 py-2.5 rounded-lg hover:bg-slate-900 transition flex items-center space-x-2">
+                            <i class="fa-solid fa-print"></i>
+                            <span>PDF 인쇄 / 저장</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">보고서 타겟 용도</label>
+                        <select id="reportPurpose" onchange="generateReport()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                            <option value="기업지원용">국내 보안기업 해외진출 지원용</option>
+                            <option value="정부보고용">부처 및 기관 경영진 보고용</option>
+                            <option value="수출로드쇼용">해외 거점 연계 B2B/G2B 로드쇼용</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">대상 기간</label>
+                        <select id="reportPeriod" onchange="generateReport()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                            <option value="2026년 상반기">2026년 상반기 누적</option>
+                            <option value="최근 3개월">최근 3개월 (2026년 5월~8월)</option>
+                            <option value="2026년 하반기 계획">2026년 하반기 추진계획 포함</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">대상 거점 선택</label>
+                        <select id="reportHubSelect" onchange="generateReport()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                            <option value="ALL">3개 거점 전체 (통합보고서)</option>
+                            <option value="중남미 거점">1. 중남미 거점</option>
+                            <option value="동남아 거점">2. 동남아 거점</option>
+                            <option value="중동/아프리카 거점">3. 중동/아프리카 거점</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Document Preview (A4 Formatted / Printable) -->
+            <div id="reportDocument" class="bg-white p-10 rounded-2xl border border-slate-300 shadow-lg max-w-4xl mx-auto space-y-8 text-slate-800">
+                <!-- Dynamic Report Content Inserted via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-500 text-xs py-6 border-t border-slate-800 no-print mt-auto">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-2">
+            <p>© 2026 K-Security 해외진출 지원 센터. All rights reserved.</p>
+            <p>본 시스템은 중남미, 동남아, 중동/아프리카 해외거점 미팅 분석 및 보안기업 수출 연계를 위한 인텔리전스 플랫폼입니다.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Updated Meeting Data reflective of 3 Target Hubs (Latin America, Southeast Asia, Middle East/Africa)
+        let meetingData = [
+            {
+                id: 1,
+                hub: "중남미 거점",
+                date: "2026-07-28",
+                orgType: "정부부처/국가CERT",
+                orgName: "코스타리카 과학혁신정보기술통신부(MICITT)",
+                contact: "Carlos Rodriguez (사이버안보국장)",
+                notes: "국가 침해대응센터(CSIRT) 고도화 및 공공기관 대상 랜섬웨어 방어 체계 도입 모색. 한국 KISA 관제 체계 벤치마킹 및 국내 보안기업 PoC 참여 타당성 검토.",
+                demands: ["#국가CERT구축", "#랜섬웨어방어", "#공공보안관제"],
+                category: "국가SOC / CERT관제",
+                companies: ["S사 (보안관제)", "I사 (랜섬웨어방어)"],
+                pipeline: "PoC 제안서 제출"
+            },
+            {
+                id: 2,
+                hub: "동남아 거점",
+                date: "2026-07-24",
+                orgType: "정부부처/국가CERT",
+                orgName: "인도네시아 국가암호보안청(BSSN)",
+                contact: "Budi Santoso (관제국장)",
+                notes: "신수도(누산타라) 이전 관련 국가 통합 SOC 관제센터 구축 프로젝트 수주 타진. AI 기반 EDR/XDR 솔루션 도입 및 관제 전문인력 양성 교육 연수 제공 요청.",
+                demands: ["#국가SOC관제", "#EDR/XDR", "#인력양성 ODA"],
+                category: "국가SOC / CERT관제",
+                companies: ["I사 (XDR)", "M사 (관제서비스)", "K사 (교육)"],
+                pipeline: "G2G MOC 체결 추진"
+            },
+            {
+                id: 3,
+                hub: "중동/아프리카 거점",
+                date: "2026-07-20",
+                orgType: "정부부처/국가CERT",
+                orgName: "사우디아라비아 국가사이버보안청(NCA)",
+                contact: "Fahad Al-Otaibi (기술협력이사)",
+                notes: "NEOM 및 스마트시티 프로젝트 대상 OT/ICS 제어시스템 보안 규제 표준 제정 및 국내 OT 보안 솔루션 현지 공급 타진. B2B 로드쇼 개최 희망.",
+                demands: ["#스마트시티보안", "#OT/ICS제어", "#ZeroTrust"],
+                category: "OT / 스마트시티 융합보안",
+                companies: ["N사 (OT관제)", "C사 (ZeroTrust)", "A사 (네트워크)"],
+                pipeline: "현지 로드쇼 합의"
+            },
+            {
+                id: 4,
+                hub: "중남미 거점",
+                date: "2026-07-15",
+                orgType: "공공기관/금융기관",
+                orgName: "브라질 중앙은행 CSIRT & 연방은행협회",
+                contact: "Fernanda Lima (금융보안팀장)",
+                notes: "금융권 모바일 앱 해킹 방지 및 FDS(이상금융거래탐지) 고도화 추진. 한국의 금융보안 솔루션 선호하며 기술 설명회 요청.",
+                demands: ["#금융보안", "#앱보안", "#FDS탐지"],
+                category: "EDR / 랜섬웨어 방어",
+                companies: ["P사 (앱보안)", "F사 (FDS)"],
+                pipeline: "온라인 기술 세미나"
+            },
+            {
+                id: 5,
+                hub: "중동/아프리카 거점",
+                date: "2026-07-10",
+                orgType: "정부부처/국가CERT",
+                orgName: "케냐 국가사이버위협조정센터(NC4)",
+                contact: "David Kiprop (센터장)",
+                notes: "동아프리카 금융/통신 인프라 대상 사이버위협 정보공유 플랫폼 구축 논의. 한국 C-TAS 체계 전수 및 소프트웨어 라이선스 구매 타진.",
+                demands: ["#위협정보공유", "#C-TAS", "#통신보안"],
+                category: "Zero Trust / 암호화",
+                companies: ["K사 (위협분석)", "S사 (암호화)"],
+                pipeline: "자료 전달 완료"
+            }
+        ];
+
+        let demandChartInstance = null;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Set default date to today
+            document.getElementById("inputDate").value = new Date().toISOString().substring(0, 10);
+            
+            // Render initial views
+            renderDashboard();
+            renderMatchingTable();
+            initDemandChart();
+            generateReport();
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabName) {
+            const tabs = ['dashboard', 'entry', 'matching', 'report'];
+            tabs.forEach(t => {
+                const sec = document.getElementById(`sec-${t}`);
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tabName) {
+                    sec.classList.remove('hidden');
+                    btn.className = "px-4 py-2 rounded-lg transition-all bg-blue-600 text-white shadow font-semibold";
+                } else {
+                    sec.classList.add('hidden');
+                    btn.className = "px-4 py-2 rounded-lg transition-all text-slate-300 hover:text-white font-medium";
+                }
+            });
+
+            if(tabName === 'dashboard') {
+                renderDashboard();
+                if(demandChartInstance) demandChartInstance.update();
+            } else if(tabName === 'matching') {
+                renderMatchingTable();
+            } else if(tabName === 'report') {
+                generateReport();
+            }
+        }
+
+        // Render Dashboard Stats & Meeting Stream
+        function renderDashboard() {
+            document.getElementById("stat-total-meetings").innerText = `${meetingData.length + 23}건`;
+            
+            const listEl = document.getElementById("recent-meetings-list");
+            listEl.innerHTML = "";
+
+            meetingData.slice().reverse().forEach(item => {
+                const el = document.createElement("div");
+                el.className = "p-3 bg-slate-50 hover:bg-slate-100 rounded-xl transition border border-slate-100 flex items-center justify-between";
+                
+                let hubBadgeColor = "bg-amber-100 text-amber-800";
+                if(item.hub.includes("동남아")) hubBadgeColor = "bg-emerald-100 text-emerald-800";
+                if(item.hub.includes("중동")) hubBadgeColor = "bg-purple-100 text-purple-800";
+
+                el.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-0.5 ${hubBadgeColor} rounded text-[10px] font-bold">${item.hub.split(' ')[0]}</span>
+                            <span class="font-bold text-slate-800 text-xs">${item.orgName}</span>
+                        </div>
+                        <p class="text-xs text-slate-600 line-clamp-1">${item.notes}</p>
+                    </div>
+                    <span class="text-[11px] text-slate-400 font-mono whitespace-nowrap ml-2">${item.date}</span>
+                `;
+                listEl.appendChild(el);
+            });
+        }
+
+        // Chart Initialization
+        function initDemandChart() {
+            const ctx = document.getElementById('demandChart').getContext('2d');
+            demandChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['국가SOC/CERT관제', 'OT/스마트시티보안', 'EDR/랜섬웨어', 'Zero Trust/암호화', '인력양성/ODA'],
+                    datasets: [
+                        {
+                            label: '1. 중남미 거점',
+                            data: [8, 3, 9, 6, 4],
+                            backgroundColor: '#f59e0b'
+                        },
+                        {
+                            label: '2. 동남아 거점',
+                            data: [12, 5, 8, 4, 10],
+                            backgroundColor: '#10b981'
+                        },
+                        {
+                            label: '3. 중동/아프리카 거점',
+                            data: [6, 11, 5, 8, 3],
+                            backgroundColor: '#a855f7'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { size: 11 } } }
+                    },
+                    scales: {
+                        x: { stacked: true, grid: { display: false } },
+                        y: { stacked: true, beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // Simulated AI Demand Analysis
+        function simulateAIAnalysis() {
+            const notes = document.getElementById("inputNotes").value;
+
+            if(!notes) {
+                alert("면담 요약 및 논의 안건 내용을 입력해 주세요.");
+                return;
+            }
+
+            document.getElementById("aiStatusBadge").className = "px-2 py-0.5 bg-amber-100 text-amber-800 text-xs rounded-full font-bold";
+            document.getElementById("aiStatusBadge").innerText = "AI 파싱 및 매칭 중...";
+
+            setTimeout(() => {
+                document.getElementById("aiStatusBadge").className = "px-2 py-0.5 bg-emerald-100 text-emerald-800 text-xs rounded-full font-bold";
+                document.getElementById("aiStatusBadge").innerText = "분석 완료";
+
+                // Intelligent keyword detection mock
+                let tags = ["#사이버안보", "#기술협력"];
+                let category = "국가SOC / CERT관제";
+                let comps = "S사 (SOC솔루션), I사 (보안관제)";
+                let action = "현지 기관 맞춤형 한국 보안 솔루션 영문 브로슈어 전달 및 온라인 초청 세미나 개최";
+
+                if(notes.includes("랜섬웨어") || notes.includes("금융") || notes.includes("앱") || notes.includes("CERT")) {
+                    tags = ["#국가CERT구축", "#랜섬웨어방어", "#금융보안"];
+                    category = "EDR / 랜섬웨어 방어";
+                    comps = "S사 (랜섬웨어방어), P사 (앱보안), I사 (보안관제)";
+                    action = "현지 침해대응 센터 대상 랜섬웨어 방어 솔루션 PoC 참가 제안서 송부";
+                } else if(notes.includes("스마트시티") || notes.includes("OT") || notes.includes("제어") || notes.includes("NEOM")) {
+                    tags = ["#스마트시티보안", "#OT/ICS제어", "#ZeroTrust"];
+                    category = "OT / 스마트시티 융합보안";
+                    comps = "N사 (OT관제), C사 (ZeroTrust), A사 (네트워크)";
+                    action = "현지 발주 사업 연계 한국 OT/ICS 보안 기업단 기술 로드쇼 추진";
+                } else if(notes.includes("SOC") || notes.includes("EDR") || notes.includes("관제") || notes.includes("인력")) {
+                    tags = ["#국가SOC관제", "#EDR/XDR", "#인력양성 ODA"];
+                    category = "국가SOC / CERT관제";
+                    comps = "I사 (XDR), M사 (관제서비스), K사 (교육연수)";
+                    action = "G2G 사이버보안 협력 MOC 체결 안건 상정 및 연수 프로그램 설계";
+                }
+
+                document.getElementById("aiDemandTags").innerHTML = tags.map(t => `<span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded font-bold">${t}</span>`).join(" ");
+                document.getElementById("aiSolutionCategory").innerHTML = `<span class="font-bold text-slate-800">${category}</span>`;
+                document.getElementById("aiMatchedCompanies").innerText = comps;
+                document.getElementById("aiActionItems").innerText = action;
+
+            }, 700);
+        }
+
+        // Form Submit Handler
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const hub = document.getElementById("inputHub").value;
+            const date = document.getElementById("inputDate").value;
+            const orgType = document.getElementById("inputOrgType").value;
+            const orgName = document.getElementById("inputOrgName").value;
+            const contact = document.getElementById("inputContact").value;
+            const notes = document.getElementById("inputNotes").value;
+
+            const category = document.getElementById("aiSolutionCategory").innerText.trim() !== "-" ? 
+                             document.getElementById("aiSolutionCategory").innerText.trim() : "국가SOC / CERT관제";
+
+            const newMeeting = {
+                id: meetingData.length + 1,
+                hub: hub,
+                date: date,
+                orgType: orgType,
+                orgName: orgName,
+                contact: contact || "담당자 미지정",
+                notes: notes,
+                demands: ["#신규수요", "#현지미팅"],
+                category: category,
+                companies: ["국내 매칭 기업군 검토 중"],
+                pipeline: "최초 면담 등록"
+            };
+
+            meetingData.push(newMeeting);
+            alert("신규 면담 내역이 해당 거점 인텔리전스 DB에 성공적으로 등록되었습니다!");
+
+            // Reset form
+            document.getElementById("meetingForm").reset();
+            document.getElementById("aiDemandTags").innerHTML = `<span class="text-slate-400 italic">면담 작성 후 AI 분석 버튼을 눌러주세요.</span>`;
+            document.getElementById("aiSolutionCategory").innerText = "-";
+            document.getElementById("aiMatchedCompanies").innerText = "-";
+            document.getElementById("aiActionItems").innerText = "-";
+            document.getElementById("aiStatusBadge").innerText = "분석 대기 중";
+
+            switchTab('matching');
+        }
+
+        // Render & Filter Matching Table
+        function renderMatchingTable() {
+            const body = document.getElementById("matchingTableBody");
+            const filterHub = document.getElementById("filterHub").value;
+            const filterCat = document.getElementById("filterCategory").value;
+
+            body.innerHTML = "";
+
+            const filtered = meetingData.filter(item => {
+                const matchHub = (filterHub === "ALL" || item.hub === filterHub);
+                const matchCat = (filterCat === "ALL" || item.category === filterCat);
+                return matchHub && matchCat;
+            });
+
+            if(filtered.length === 0) {
+                body.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400">조건에 부합하는 거점 면담 내역이 없습니다.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+                tr.innerHTML = `
+                    <td class="py-3 px-4 font-medium text-slate-800">
+                        <div>${item.hub}</div>
+                        <div class="text-xs text-slate-400">${item.date}</div>
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="font-bold text-slate-800">${item.orgName}</div>
+                        <div class="text-xs text-slate-500">${item.contact}</div>
+                    </td>
+                    <td class="py-3 px-4 max-w-xs">
+                        <p class="text-xs text-slate-700 line-clamp-2">${item.notes}</p>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            ${item.demands.map(d => `<span class="text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">${d}</span>`).join('')}
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 font-semibold text-xs text-slate-700">${item.category}</td>
+                    <td class="py-3 px-4 text-xs font-semibold text-blue-700">
+                        ${item.companies.join(', ')}
+                    </td>
+                    <td class="py-3 px-4">
+                        <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full">${item.pipeline}</span>
+                    </td>
+                `;
+                body.appendChild(tr);
+            });
+        }
+
+        function filterMatchingTable() {
+            renderMatchingTable();
+        }
+
+        // Generate Automated Report Document
+        function generateReport() {
+            const purpose = document.getElementById("reportPurpose").value;
+            const period = document.getElementById("reportPeriod").value;
+            const selectedHub = document.getElementById("reportHubSelect").value;
+            const doc = document.getElementById("reportDocument");
+
+            let targetMeetings = meetingData;
+            if(selectedHub !== "ALL") {
+                targetMeetings = meetingData.filter(m => m.hub === selectedHub);
+            }
+
+            doc.innerHTML = `
+                <!-- Report Header -->
+                <div class="border-b-2 border-slate-900 pb-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="px-3 py-1 bg-slate-900 text-white text-xs font-bold rounded">${purpose}</span>
+                            <h1 class="text-2xl font-black text-slate-900 mt-3">글로벌 보안 시장 수요 및 국내 보안기업 진출 전략 보고서</h1>
+                            <p class="text-sm text-slate-500 mt-1">대상 기간: ${period} | 대상 거점: ${selectedHub === 'ALL' ? '3개 전략 거점 전체 (중남미, 동남아, 중동/아프리카)' : selectedHub}</p>
+                        </div>
+                        <div class="text-right text-xs text-slate-400">
+                            <p>발간기관: K-Security 해외진출 지원센터</p>
+                            <p>작성일자: 2026년 8월 3일</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Executive Summary -->
+                <div class="space-y-3">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center border-l-4 border-blue-600 pl-3">
+                        1. Executive Summary (거점별 종합 요약)
+                    </h3>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm leading-relaxed text-slate-700 space-y-2">
+                        <p>• <strong>거점별 총평:</strong> ${period} 동안 주요 해외 거점에서 총 ${targetMeetings.length}건의 핵심 부처·기관 면담이 진행되었으며, 각 거점별 시장 성숙도와 정책적 요구에 따른 특화 보안 수요가 명확히 도출됨.</p>
+                        <p>• <strong>1. 중남미 거점:</strong> 코스타리카 침해사고 이후 국가 CERT/CSIRT 관제 체계 구축 및 금융권 랜섬웨어 방어 기술 수요가 최우선 과제임.</p>
+                        <p>• <strong>2. 동남아 거점:</strong> 인도네시아 신수도 이전, 베트남 디지털 전환과 연계된 국가 SOC 관제센터 구축 및 AI 기반 EDR, 전문인력 양성 ODA 연계 타진.</p>
+                        <p>• <strong>3. 중동/아프리카 거점:</strong> 사우디 NEOM 등 스마트시티 대형 프로젝트 기반 OT/ICS 제어시스템 보안 및 Zero Trust, 물리·사이버 융합보안 패키지 진출 유망.</p>
+                    </div>
+                </div>
+
+                <!-- Hub Demand Intelligence -->
+                <div class="space-y-4">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center border-l-4 border-blue-600 pl-3">
+                        2. 해외 거점별 핵심 면담 내역 & 보안 수요 분석
+                    </h3>
+                    <div class="space-y-3">
+                        ${targetMeetings.map(m => `
+                            <div class="p-4 border border-slate-200 rounded-xl text-sm">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-bold text-blue-800">[${m.hub}] ${m.orgName}</span>
+                                    <span class="text-xs text-slate-400">${m.date} | ${m.contact}</span>
+                                </div>
+                                <p class="text-slate-700 mb-2"><strong>면담 및 논의 요약:</strong> ${m.notes}</p>
+                                <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-100">
+                                    <span class="text-slate-500"><strong>핵심 수요:</strong> ${m.demands.join(' ')}</span>
+                                    <span class="font-bold text-emerald-700">추진 단계: ${m.pipeline}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Company Matchmaking Matrix -->
+                <div class="space-y-3">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center border-l-4 border-blue-600 pl-3">
+                        3. 현지 수요-국내 보안기업 매칭 매트릭스 (Match-making Matrix)
+                    </h3>
+                    <table class="w-full text-left text-xs border border-slate-200">
+                        <thead class="bg-slate-100 text-slate-700 font-bold">
+                            <tr>
+                                <th class="p-2 border">거점</th>
+                                <th class="p-2 border">현지 기관/기업 수요</th>
+                                <th class="p-2 border">추천 솔루션 분류</th>
+                                <th class="p-2 border">진출 매칭 추천 한국 기업</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${targetMeetings.map(m => `
+                                <tr class="border-b">
+                                    <td class="p-2 border font-medium">${m.hub.split(' ')[0]}</td>
+                                    <td class="p-2 border">${m.demands.join(', ')}</td>
+                                    <td class="p-2 border font-semibold">${m.category}</td>
+                                    <td class="p-2 border text-blue-700 font-bold">${m.companies.join(', ')}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Action Items -->
+                <div class="space-y-3">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center border-l-4 border-blue-600 pl-3">
+                        4. 향후 해외진출 추진 로드맵 (Action Items)
+                    </h3>
+                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
+                        <li><strong>중남미:</strong> 국가 CSIRT 및 금융권 대상 'K-시큐리티 랜섬웨어 방어 솔루션 세미나' 개최 (산호세/상파울루)</li>
+                        <li><strong>동남아:</strong> BSSN 국가 SOC 관제센터 구축 프로젝트 참여를 위한 G2G MOC 체결 및 국내 EDR 기업단 기술 데모 수행</li>
+                        <li><strong>중동/아프리카:</strong> 사우디/UAE 스마트시티 프로젝트 발주처 맞춤형 OT/ICS 융합보안 로드쇼 및 현지 파트너십 매칭</li>
+                    </ul>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
